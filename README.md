@@ -1,65 +1,38 @@
 Laravel Country Validation Rule
-=========================
+================================
 
 A simple country validation rule for Laravel
 
-##How to install
+## How to install
+
 1. Clone or download this repo.
-2. Copy the ``custom`` folder into your Laravel project's ``app/`` directory.
-3. Make sure the validator is included
-	- In your Laravel project's ``app/start/global.php`` file at the top you'll see something like this.
-	
-				ClassLoader::addDirectories(array(
-			    app_path() . '/commands',
-			    app_path() . '/controllers',
-			    app_path() . '/models',
-			    app_path() . '/database/seeds',	
-			));
-	- You'll want to add ``app_path() . '/custom',`` into it so it becomes
-	
-			ClassLoader::addDirectories(array(
-						    app_path() . '/commands',
-						    app_path() . '/controllers',
-						    app_path() . '/models',
-						    app_path() . '/database/seeds',
-							app_path() . '/custom',	
-						));
-4. Excellent! You're doing well. Now, you need to register the validation resolver:
+2. Copy the ``custom`` folder into your Laravel project's ``app/Validators`` directory.
+3. Add the follwing to a service provider:
 
-		Validator::resolver(function($translator, $data, $rules, $messages)
-		{
-		    return new CountryValidator($translator, $data, $rules, $messages);
-		});
-		
+```
+Validator::extend('country', \App\Validators\CountryValidator::class);
+```
 
-Copy and paste that into your ``routes.php`` or ``global.php`` file.
+4. Add a validation error message in ``app/lang/en/validation.php`` in the validation language lines array:
 
-5. Add a validation error message in ``app/lang/en/validation.php`` in the validation language lines array
+```
+"country" => "The :attribute must be a country",
+```
 
-####For example
-    "country" => "The :attribute must be a country",
-	"accepted" => "The :attribute must be accepted.",
-    "active_url" => "The :attribute is not a valid URL.",
-    "after" => "The :attribute must be a date after :date.",
+## How to use
 
+Simply use the ``country`` rule like any other validation rule.
 
-##How to use
-Simply use the ``country`` rule like any other validation rule. 
+```
+$rules = [
+    'country' => 'required|country'
+];
+```
 
-####For example
+Forked from [Sailr.co](http://sailr.co).
 
-		$rules = [
-			'country' => 'required|country'
-		];
-		$validator = Validator::make($data, $rules);
-		///
+## License
 
-
-###Enjoy :)
-
-PS: Want simple, social Ecommerce? Check us out at [Sailr.co](http://sailr.co).
-
-##License
 ####tl;dr: do whatever you want with it, but don't blame us if it breaks something.
 
 This is free and unencumbered software released into the public domain.
